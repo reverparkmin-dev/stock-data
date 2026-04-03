@@ -1,10 +1,14 @@
 {
   "ticker": "005930",
   "name": "삼성전자",
-  "revenue": 302231400000000,
-  "prev_revenue": 258935500000000,
-  "revenue_growth_pct": 16.72,
-  "operating_profit": 6567000000000,
-  "op_margin_pct": 2.17,
+  "dart_name": "삼성전자",
+  "corp_code": "00126380",
+  "business_year": "2024",
+  "report_code": "11011",
+  "revenue": 300870903000000,
+  "prev_revenue": 258935494000000,
+  "revenue_growth_pct": 16.2,
+  "operating_profit": 32725961000000,
+  "op_margin_pct": 10.88,
   "updated_at": "2026-04-03"
 }
