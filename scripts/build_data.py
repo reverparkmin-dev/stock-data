@@ -11,17 +11,15 @@ import xml.etree.ElementTree as ET
 API_KEY = os.getenv("DART_API_KEY")
 BASE_URL = "https://opendart.fss.or.kr/api"
 
-
-# 조회할 종목
+# 여기 종목만 추가하면 자동 생성됨
 STOCKS = [
     {"ticker": "005930", "name": "삼성전자"},
-    # {"ticker": "000660", "name": "SK하이닉스"},
-    # {"ticker": "035420", "name": "NAVER"},
+    {"ticker": "000660", "name": "SK하이닉스"},
+    {"ticker": "035420", "name": "NAVER"},
 ]
 
-# 보고서 코드
 REPORT_CODE = "11011"   # 사업보고서
-BUSINESS_YEAR = "2024"  # 필요시 수정
+BUSINESS_YEAR = "2024"
 
 
 def safe_int(value):
@@ -98,7 +96,6 @@ def fetch_major_accounts(corp_code, bsns_year, reprt_code):
 
 
 def pick_amount(item):
-    # 사업보고서는 thstrm_amount, 분/반기에는 누적값 thstrm_add_amount가 더 유용한 경우가 많음
     return safe_int(item.get("thstrm_amount")) or safe_int(item.get("thstrm_add_amount"))
 
 
@@ -120,16 +117,14 @@ def extract_metrics(rows):
         if fs_div != "CFS":
             continue
 
-        # 손익계산서 중심
+        # 손익계산서만 사용
         if sj_div != "IS":
             continue
 
-        # 매출액
         if account_nm in ("매출액", "수익(매출액)", "영업수익"):
             revenue = pick_amount(row)
             prev_revenue = pick_prev_amount(row)
 
-        # 영업이익
         if account_nm in ("영업이익",):
             operating_profit = pick_amount(row)
 
@@ -173,12 +168,26 @@ def build_one_stock(stock, corp_map):
     }
 
     os.makedirs("data", exist_ok=True)
-    output_path = f"data/{ticker}.json"
 
+    output_path = f"data/{ticker}.json"
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
     print(f"saved: {output_path}")
+    return result
+
+
+def build_index(results):
+    index_data = {
+        "updated_at": datetime.utcnow().strftime("%Y-%m-%d"),
+        "count": len(results),
+        "stocks": results
+    }
+
+    with open("data/index.json", "w", encoding="utf-8") as f:
+        json.dump(index_data, f, ensure_ascii=False, indent=2)
+
+    print("saved: data/index.json")
 
 
 def main():
@@ -186,9 +195,16 @@ def main():
         raise RuntimeError("환경변수 DART_API_KEY 가 없습니다.")
 
     corp_map = download_corp_codes()
+    results = []
 
     for stock in STOCKS:
-        build_one_stock(stock, corp_map)
+        try:
+            result = build_one_stock(stock, corp_map)
+            results.append(result)
+        except Exception as e:
+            print(f"[ERROR] {stock['ticker']} {stock['name']}: {e}")
+
+    build_index(results)
 
 
 if __name__ == "__main__":
