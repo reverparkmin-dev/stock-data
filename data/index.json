@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-03",
+  "updated_at": "2026-04-04",
   "count": 3,
   "stocks": [
     {
@@ -14,7 +14,7 @@
       "revenue_growth_pct": 16.2,
       "operating_profit": 32725961000000,
       "op_margin_pct": 10.88,
-      "updated_at": "2026-04-03"
+      "updated_at": "2026-04-04"
     },
     {
       "ticker": "000660",
@@ -28,7 +28,7 @@
       "revenue_growth_pct": 102.02,
       "operating_profit": 23467319000000,
       "op_margin_pct": 35.45,
-      "updated_at": "2026-04-03"
+      "updated_at": "2026-04-04"
     },
     {
       "ticker": "035420",
@@ -42,7 +42,7 @@
       "revenue_growth_pct": 11.03,
       "operating_profit": 1979263438827,
       "op_margin_pct": 18.43,
-      "updated_at": "2026-04-03"
+      "updated_at": "2026-04-04"
     }
   ]
 }
